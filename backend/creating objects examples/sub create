@@ -1,0 +1,20 @@
+{
+  "user": null,
+  "order_item": [
+    {
+      "product": 1,
+      "amount": 1
+    }
+  ],
+  "region": "ua",
+  "phonenum": "+380123456789",
+  "ref_city": "8d5a980d-391c-11dd-90d9-001a92567626",
+  "rec_warehouse": "ab48505d-7a06-11e4-acce-0050568002cf",
+  "city": "Kyiv",
+  "name": "Олег",
+  "surname": "Кутрик",
+  "lastname": "Ігорович",
+  "date_start": "2024-11-01",
+  "shipment_address": "Main Street 15",
+  "country": "UA"
+}

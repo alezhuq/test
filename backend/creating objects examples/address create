@@ -1,0 +1,14 @@
+{
+  "addresses": [
+    {
+      "country": "UA",
+      "first_name": "Oleh",
+      "last_name": "Kutryk",
+      "city": "Chortkiv",
+      "address": "Podilska 35",
+      "zip_code": "48501",
+      "apartment": "28",
+      "phonenum": "0685141364"
+    }
+  ]
+}

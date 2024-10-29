@@ -1,0 +1,20 @@
+FROM python:3.11-slim
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy requirements file into the container
+COPY requirements.txt /app/
+
+# Install the required Python packages
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the rest of your application's code
+COPY . /app
+
+# Set environment variables for Celery
+ENV CELERY_BROKER_URL=redis://redis:6379/0
+ENV CELERY_RESULT_BACKEND=redis://redis:6379/0
+
+# Define the command to start Celery
+CMD ["celery", "-A", "backend", "worker", "--loglevel=info"]

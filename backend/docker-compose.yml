@@ -1,0 +1,87 @@
+version: '3'
+
+services:
+
+  nginx:
+    build: ./nginx
+    ports:
+      - 1337:80
+    depends_on:
+      - web
+    volumes:
+      - static:/app/static/
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6380:6379"
+    env_file:
+      ./.env
+
+  db:
+
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    env_file:
+      ./.env
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    expose:
+      - "5432"
+
+  web:
+    restart: always
+    build: .
+    environment:
+      PYTHONPATH: /code
+    entrypoint: ['./entrypoint.sh']
+    volumes:
+      - .:/code
+      - ./staticfiles_build/staticfiles:/static/
+      - static:/app/static/
+    ports:
+      - "8000:8000"
+    expose:
+      - 8000
+    env_file:
+      ./.env
+    depends_on:
+      - db
+      - redis
+
+  celery:
+    build: .
+    command: ['celery', '-A', 'backend', 'worker', '-l', 'INFO']
+    depends_on:
+      - redis
+    env_file:
+      ./.env
+
+
+  stripe:
+    image: stripe/stripe-cli
+    container_name: stripe
+    command: "listen --api-key ${STRIPE_SECRET_KEY} --forward-to web:8000/api/v1/order/payment/webhook/"
+    env_file:
+      ./.env
+    ports:
+      - "5431:5431"
+    expose:
+      - "5431"
+
+
+
+#  worker:
+#    restart: unless-stopped
+#    build:
+#      context: .
+#    command: ['celery', '-A', 'backend', 'worker', '-l', 'INFO']
+#    env_file:
+#      - .env
+#    depends_on:
+#        - db
+#        - redis
+
+volumes:
+  static:

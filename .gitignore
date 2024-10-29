@@ -1,0 +1,15 @@
+__pycache__
+venv
+.idea
+data
+media
+backend/.env
+backend/admin
+media
+postgres
+backend/shop/migrations
+.vercelenv
+.env
+backend/.env
+civil-sprite-427304-h5-9234833f76e0.json
+k8s
