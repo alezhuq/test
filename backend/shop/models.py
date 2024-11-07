@@ -52,6 +52,7 @@ class Address(models.Model):
     apartment = models.CharField(max_length=10)
     phonenum = models.CharField(max_length=13)
 
+
 class Language(models.TextChoices):
     UA = "ua", "Ukrainian"
     CZ = "cz", "Czech"
@@ -62,6 +63,7 @@ class Language(models.TextChoices):
     ES = "es", "Espanol"
     DE = "de", "Deutch"
 
+
 # change of code
 
 """-------------------------PRODUCTS-------------------------"""
@@ -71,6 +73,7 @@ class Product(models.Model):
     name = models.CharField(max_length=20, unique=True)
     weight = models.IntegerField(help_text="weight of product in grams")
     preview_image = models.ImageField(upload_to='photos/shop/%Y/%m/%d', blank="True")
+    image_alt = models.CharField(max_length=20)
     is_active = models.BooleanField(default=True, help_text="instead of deleting products, you can deactivate them")
 
     length = models.IntegerField()
@@ -104,6 +107,7 @@ class ProductFlavor(models.Model):
     discount = models.DecimalField(max_digits=10, decimal_places=2)
     price_uah = models.DecimalField(max_digits=10, decimal_places=2)
     price_eur = models.DecimalField(max_digits=10, decimal_places=2)
+
     def __str__(self):
         return f'{self.product.name} {self.name}'
 

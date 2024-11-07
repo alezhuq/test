@@ -303,12 +303,14 @@ class ProductPreviewApiView(ListAPIView):
                     "localized_info_name": product.product_info.first().localized_info_name if product.product_info.exists() else "",
                     "description": product.product_info.first().description if product.product_info.exists() else "",
                 },
-                "preview_image": product.preview_image.url,
+                "preview_image": request.build_absolute_uri(product.preview_image.url),
                 "product_spec": [
                     {
                         "name": "Test Flavour",  # Placeholder, adjust according to your actual data
                         "eu_quantity": product.product_spec.first().eu_quantity if product.product_spec.exists() else 0,
                         "ua_quantity": product.product_spec.first().ua_quantity if product.product_spec.exists() else 0,
+                        "price_eu": product.product_spec.first().price_eur  if product.product_spec.exists() else 0,
+                        "price_ua": product.product_spec.first().price_eur if product.product_spec.exists() else 0,
                     }
                 ]
             }
@@ -401,14 +403,17 @@ class ProductRetrieveUpdateDestroyApiView(RetrieveUpdateDestroyAPIView):
         product_function = product.product_function.first().info if product.product_function.exists() else None
         product_advantage = product.product_advantage.first().info if product.product_advantage.exists() else None
         product_use = product.product_use.first().info if product.product_use.exists() else None
-        #product_language = product.product_info.first() if product.product_info.exists()
+        # product_language = product.product_info.first() if product.product_info.exists()
+
         for spec in product.product_spec.all():
             print(vars(spec))
+
         # Transform product_spec data
         product_spec_list = []
         for spec in product.product_spec.all():
             product_flavor = spec.product_flavor.first() if spec.product_flavor.exists() else None
-            spec_images = [{"img_name": img.name, "image": img.image.url} for img in spec.spec_image.all()]
+            spec_images = [{"img_name": img.name, "image": request.build_absolute_uri(img.image.url)} for img in
+                           spec.spec_image.all()]
 
             transformed_spec = {
                 "id": spec.id,
@@ -418,7 +423,7 @@ class ProductRetrieveUpdateDestroyApiView(RetrieveUpdateDestroyAPIView):
                 "spec_image": spec_images,
                 "price_usd": spec.price_usd,  # Adjust as necessary
                 "price_uah": spec.price_uah,  # Adjust as necessary
-                "price_eur": spec.price_eur   # Adjust as necessary
+                "price_eur": spec.price_eur  # Adjust as necessary
             }
             product_spec_list.append(transformed_spec)
 
@@ -435,6 +440,7 @@ class ProductRetrieveUpdateDestroyApiView(RetrieveUpdateDestroyAPIView):
         }
 
         return Response(transformed_data)
+
 
 """-------------------------PRODUCTS private-------------------------"""
 
