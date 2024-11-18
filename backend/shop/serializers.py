@@ -265,8 +265,8 @@ class ProductSpecSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductFlavor
         fields = (
-        "id", "name", "eu_quantity", "ua_quantity", "product_flavor", "spec_image", "price_usd", "price_uah",
-        "price_eur",)
+            "id", "name", "eu_quantity", "ua_quantity", "product_flavor", "spec_image", "price_usd", "price_uah",
+            "price_eur",)
 
 
 class ProductInfoSerializer(serializers.ModelSerializer):
@@ -276,11 +276,32 @@ class ProductInfoSerializer(serializers.ModelSerializer):
         lookup_field = "info_id"
 
 
-
 # class ProductImageSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = ProductImage
 #         fields = ["name", "image"]
+
+
+class ProductNewSerializer(serializers.ModelSerializer):
+    # Set many=False for product_info, product_function, product_advantage, and product_use
+
+    product_info = ProductInfoSerializer(many=True)
+    product_spec = ProductPreviewSpecSerializer(many=True)
+
+    class Meta:
+        model = Product
+        fields = ("id", "preview_image", "product_info", "product_spec")
+
+
+class ProductBasketerializer(serializers.ModelSerializer):
+    # Set many=False for product_info, product_function, product_advantage, and product_use
+
+    product_info = ProductInfoSerializer(many=True)
+    product_spec = ProductPreviewSpecSerializer(many=True)
+
+    class Meta:
+        model = Product
+        fields = ("id", "preview_image", "product_info", "product_spec")
 
 
 class ProductPreviewSerializer(serializers.ModelSerializer):
@@ -294,7 +315,9 @@ class ProductPreviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ("id", "preview_image", "product_info", "product_spec", "product_function", "product_advantage", "product_use")
+        fields = (
+            "id", "preview_image", "product_info", "product_spec", "product_function", "product_advantage",
+            "product_use")
 
 
 class ProductSerializer(serializers.ModelSerializer):

@@ -18,7 +18,8 @@ from .views import (
     # ProductImageRetrieveUpdateDestroyAPIView,
     UserVerificationView,
     GoogleLogin, add_payment_method, UserCreateFavoritesView, UserAddressesView, UserCreateAddressesView,
-    UserUpdateDestroyFavoritesView, UserGetUpdateDestroyAddressView, AddCardView,
+    UserUpdateDestroyFavoritesView, UserGetUpdateDestroyAddressView, AddCardView, ProductNewApiView,
+    ProductBasketApiView,
 
 )
 
@@ -45,7 +46,11 @@ urlpatterns = [
     # product
     # *public*
     path('product/', ProductPreviewApiView.as_view()),
+    path('product/new/', ProductNewApiView.as_view()),
+    path('product/basket/', ProductBasketApiView.as_view()),
     path('product/<int:id>/', ProductRetrieveUpdateDestroyApiView.as_view()),
+
+
     # *private*
     # path('product/create/', ProductCreateApiView.as_view()),
 

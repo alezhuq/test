@@ -21,7 +21,7 @@ from .tasks import save_payment_method
 
 from .models import User, ProductFunction, ProductAdvantage, ProductUse, FlavorLanguage, Address
 from .serializers import CustomUserSerializer, LoginSerializer, FavoritesCreateSerializer, UserAddressSerializer, \
-    AddCardSerializer
+    AddCardSerializer, ProductNewSerializer
 from django.conf import settings
 
 import stripe
@@ -273,8 +273,99 @@ class AddCardView(CreateAPIView):
 
 """-------------------------PRODUCTS public-------------------------"""
 
+class ProductBasketApiView(ListAPIView):
+    serializer_class = ProductNewSerializer
+    permission_classes = (IsStaffOrReadOnly,)
+
+    def get_queryset(self):
+        language = self.request.query_params.get("lang", "en")
+        queryset = Product.objects.prefetch_related(
+            Prefetch(
+                "product_info",
+                queryset=ProductInfo.objects.exclude(~Q(language=language))
+            )
+        ).prefetch_related(
+            "product_spec"
+        ).filter(
+            is_basket=True
+        )
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+
+        # Transform each product to the target structure
+        transformed_data = []
+        for product in queryset:
+            transformed_product = {
+                "id": product.id,
+                "product_info": {
+                    "localized_info_name": product.product_info.first().localized_info_name if product.product_info.exists() else "",
+                    "description": product.product_info.first().description if product.product_info.exists() else "",
+                },
+                "preview_image": request.build_absolute_uri(product.preview_image.url),
+                "product_spec": [
+                    {
+                        "name": "Test Flavour",  # Placeholder, adjust according to your actual data
+                        "eu_quantity": product.product_spec.first().eu_quantity if product.product_spec.exists() else 0,
+                        "ua_quantity": product.product_spec.first().ua_quantity if product.product_spec.exists() else 0,
+                        "price_eu": product.product_spec.first().price_eur  if product.product_spec.exists() else 0,
+                        "price_ua": product.product_spec.first().price_eur if product.product_spec.exists() else 0,
+                    }
+                ]
+            }
+            transformed_data.append(transformed_product)
+
+        return Response(transformed_data)
+
+
+class ProductNewApiView(ListAPIView):
+    serializer_class = ProductNewSerializer
+    permission_classes = (IsStaffOrReadOnly,)
+
+    def get_queryset(self):
+        language = self.request.query_params.get("lang", "en")
+        queryset = Product.objects.prefetch_related(
+            Prefetch(
+                "product_info",
+                queryset=ProductInfo.objects.exclude(~Q(language=language))
+            )
+        ).prefetch_related(
+            "product_spec"
+        ).filter(
+            is_new=True
+        )
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+
+        # Transform each product to the target structure
+        transformed_data = []
+        for product in queryset:
+            transformed_product = {
+                "id": product.id,
+                "product_info": {
+                    "localized_info_name": product.product_info.first().localized_info_name if product.product_info.exists() else "",
+                    "description": product.product_info.first().description if product.product_info.exists() else "",
+                },
+                "preview_image": request.build_absolute_uri(product.preview_image.url),
+                "product_spec": [
+                    {
+                        "name": "Test Flavour",  # Placeholder, adjust according to your actual data
+                        "eu_quantity": product.product_spec.first().eu_quantity if product.product_spec.exists() else 0,
+                        "ua_quantity": product.product_spec.first().ua_quantity if product.product_spec.exists() else 0,
+                        "price_eu": product.product_spec.first().price_eur  if product.product_spec.exists() else 0,
+                        "price_ua": product.product_spec.first().price_eur if product.product_spec.exists() else 0,
+                    }
+                ]
+            }
+            transformed_data.append(transformed_product)
+
+        return Response(transformed_data)
 
 # cache
+
 class ProductPreviewApiView(ListAPIView):
     serializer_class = ProductPreviewSerializer
     permission_classes = (IsStaffOrReadOnly,)
