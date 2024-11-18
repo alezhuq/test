@@ -73,7 +73,7 @@ class Product(models.Model):
     name = models.CharField(max_length=20, unique=True)
     weight = models.IntegerField(help_text="weight of product in grams")
     preview_image = models.ImageField(upload_to='photos/shop/%Y/%m/%d', blank="True")
-    image_alt = models.CharField(max_length=20)
+    img_name = models.CharField(default="image", max_length=20)
     is_active = models.BooleanField(default=True, help_text="instead of deleting products, you can deactivate them")
     is_new = models.BooleanField(default=False, help_text="mark products for new suggestion")
     is_basket = models.BooleanField(default=False, help_text="mark products for basket suggestion")

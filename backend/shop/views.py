@@ -298,6 +298,7 @@ class ProductBasketApiView(ListAPIView):
         transformed_data = []
         for product in queryset:
             transformed_product = {
+                "img_name": product.img_name,
                 "id": product.id,
                 "product_info": {
                     "localized_info_name": product.product_info.first().localized_info_name if product.product_info.exists() else "",
@@ -344,6 +345,7 @@ class ProductNewApiView(ListAPIView):
         transformed_data = []
         for product in queryset:
             transformed_product = {
+                "img_name": product.img_name,
                 "id": product.id,
                 "product_info": {
                     "localized_info_name": product.product_info.first().localized_info_name if product.product_info.exists() else "",
@@ -389,6 +391,7 @@ class ProductPreviewApiView(ListAPIView):
         transformed_data = []
         for product in queryset:
             transformed_product = {
+                "img_name": product.img_name,
                 "id": product.id,
                 "product_info": {
                     "localized_info_name": product.product_info.first().localized_info_name if product.product_info.exists() else "",
