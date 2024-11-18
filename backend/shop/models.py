@@ -125,6 +125,7 @@ class FlavorLanguage(models.Model):
 class FlavorImage(models.Model):
     name = models.CharField(max_length=20)
     image = models.ImageField(upload_to='photos/shop/%Y/%m/%d')
+
     spec = models.ForeignKey(ProductFlavor, on_delete=models.CASCADE, related_name="spec_image")
 
     def __str__(self):

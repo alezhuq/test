@@ -290,7 +290,7 @@ class ProductNewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ("id", "preview_image", "product_info", "product_spec")
+        fields = ("id", "preview_image", "image_alt" "product_info", "product_spec")
 
 
 class ProductBasketerializer(serializers.ModelSerializer):
@@ -301,7 +301,7 @@ class ProductBasketerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ("id", "preview_image", "product_info", "product_spec")
+        fields = ("id", "preview_image", "image_alt" "product_info", "product_spec")
 
 
 class ProductPreviewSerializer(serializers.ModelSerializer):
@@ -316,7 +316,7 @@ class ProductPreviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = (
-            "id", "preview_image", "product_info", "product_spec", "product_function", "product_advantage",
+            "id", "preview_image", "image_alt", "product_info", "product_spec", "product_function", "product_advantage",
             "product_use")
 
 
